@@ -33,8 +33,15 @@ if __name__ == '__main__':
     parser = ArgumentParser()
     parser.add_argument("-s", "--steps", action="store", dest="steps", required=True, type=str,
                         help="执行步骤，以逗号划分")
+    parser.add_argument("-d", "--debug", action="store_true", dest="debug",
+                        help="debug mode")
+    parser.add_argument("-t", "--strict", action="store_true", dest="strict",
+                        help="strict mode")
     args = parser.parse_args()
     steps = args.steps.split(",")
+    debug = args.debug
+    strict = args.strict
+
     assert len(steps) > 0, "指定步骤为空！请正确添加执行步骤，如'1,2,3,4'"
 
     if '1' in steps:
@@ -46,7 +53,12 @@ if __name__ == '__main__':
         print("Step 2 外网过滤")
         chdir("2")
         for file in glob("datas/*.txt"):
-            ex_cmd("python icp_crawler.py -p datas/{} -w -i -c".format(split(file)[1]))
+            cmd = "python icp_crawler.py -p datas/{} -w -i".format(split(file)[1])
+            if debug:
+                cmd += " -d"
+            if strict:
+                cmd += " -c"
+            ex_cmd(cmd)
         chdir("..")
 
     if '3' in steps:
