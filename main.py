@@ -37,7 +37,7 @@ if __name__ == '__main__':
                         help="debug mode")
     parser.add_argument("-t", "--strict", action="store_true", dest="strict",
                         help="strict filter mode")
-    parser.add_argument("-p", "--path", action="store", dest="path", default="..\\python.exe"
+    parser.add_argument("-p", "--path", action="store", dest="path", default="..\\python.exe",
                         help="path of python interruptor")
     args = parser.parse_args()
     steps = args.steps.split(",")
