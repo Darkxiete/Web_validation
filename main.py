@@ -36,11 +36,15 @@ if __name__ == '__main__':
     parser.add_argument("-d", "--debug", action="store_true", dest="debug",
                         help="debug mode")
     parser.add_argument("-t", "--strict", action="store_true", dest="strict",
-                        help="strict mode")
+                        help="strict filter mode")
+    parser.add_argument("-p", "--path", action="store", dest="path", default="..\\python.exe"
+                        help="path of python interruptor")
     args = parser.parse_args()
     steps = args.steps.split(",")
     debug = args.debug
     strict = args.strict
+    path = args.path
+
 
     assert len(steps) > 0, "指定步骤为空！请正确添加执行步骤，如'1,2,3,4'"
 
