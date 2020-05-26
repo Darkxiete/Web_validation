@@ -3,6 +3,7 @@ from argparse import ArgumentParser
 from os import chdir, mkdir, rename, walk, getcwd
 from subprocess import Popen
 from os.path import splitext, exists, join, abspath
+from main import ex_cmd
 
 def decrypt(file_path):
     with open(file_path, "rb") as f:
@@ -39,16 +40,16 @@ if __name__ == "__main__":
         cmd = "tar -zxvf {} -C {}".format(_tgz, _tgz_name)
         print(cmd)
         # 需要等待子线程结束，要不然下面重命名会找不到文件直接主进程关掉了
-        Popen(cmd, shell=True).communicate()
+        ex_cmd(cmd)
     
         # 重命名
         dot_files_path = join(_tgz_name, "_queryResult_db_")
         chdir(dot_files_path)
         print("change dir to {}".format(dot_files_path))
-        Popen("ls result*. | sh -c \"xargs -n1 -i mv {} {}tar\"", shell=True).communicate()
+        ex_cmd("ls result*. | sh -c \"xargs -n1 -i mv {} {}tar\"")
         # Popen("ls |sh -c \"xargs -n1 -i sed -i '1d' {}\"", shell=True).communicate()
-        Popen("ls result*.tar | sh -c \"xargs -n1 -i tar -zxvf {}\"", shell=True).communicate()
-        Popen("ls _queryResult_db_/result*.txt | sh -c \"xargs -n1 -i cat {} >>../../" + num + ".txt\"", shell=True).communicate()
+        ex_cmd("ls result*.tar | sh -c \"xargs -n1 -i tar -zxvf {}\"")
+        ex_cmd("ls _queryResult_db_/result*.txt | sh -c \"xargs -n1 -i cat {} >>../../" + num + ".txt\"")
         print("change dir to {}".format(abslt_root_path))
         chdir(abslt_root_path)
 
