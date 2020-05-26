@@ -3,7 +3,7 @@ from os.path import join, split, splitext, exists
 import pandas as pd
 from typing import List
 from glob import glob
-from os import chdir, mkdir
+from os import chdir, mkdir, makedirs
 from argparse import ArgumentParser
 
 
@@ -14,6 +14,8 @@ def move_files_by_csv(csv_path: str, pics_src_path: str, pics_dir_path: str) -> 
         pic_src_path = join(pics_src_path, pic_name)
         pic_dst_path = join(pics_dir_path, pic_name)
         pic_dst_path = join("3\\datas\\", pic_dst_path)
+        if not exists(pic_dst_path):
+            makedirs(pic_dst_path)
         try:
             copy(pic_src_path,pic_dst_path)
             print("copy {} to {}".format(pic_src_path, pic_dst_path))
@@ -23,10 +25,8 @@ def move_files_by_csv(csv_path: str, pics_src_path: str, pics_dir_path: str) -> 
 def move_files_by_csvs(csv_path: List[str], pics_src_path: str) -> None:
     for path in csv_path:
         _, csv_name = split(path)
-        csv_path = splitext(csv_name)[0]
-        if not exists(csv_path):
-            mkdir(csv_path)
-        move_files_by_csv(path, pics_src_path, join(".", csv_path))
+        _csv_path = splitext(csv_name)[0]
+        move_files_by_csv(path, pics_src_path, join(".", _csv_path))
 
 
 

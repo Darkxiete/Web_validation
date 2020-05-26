@@ -12,9 +12,10 @@ def ex_cmd(cmd: str, py_path=None) -> None:
     print(cmd)
     if "python" in cmd and py_path:
         cmd = cmd.replace("python", py_path)
-    for sh in ("ls", "cp", "mv", "rm", "ls", "xargs", "sort", "cat"):
+    for sh in ("ls ", "cp ", "mv ", "rm ", "ls ", "xargs ", "sort ", "cat "):
         if sh in cmd:
-            cmd.replace(sh, "bin\\{}.exe".format(sh))
+            cmd = cmd.replace(sh, "bin\\{}.exe ".format(sh[:-1]))
+            print(cmd)
     Popen(cmd, shell=True).communicate()
 
 
