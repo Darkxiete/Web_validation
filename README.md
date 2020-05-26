@@ -1,61 +1,44 @@
 # 使用前
 
-## 1 首先安装所需要的包
+安装cmder
 
-```python
-pip install -r requirements.txt 
-```
+1. 将cmder解压到任意位置
 
-如速度较慢需要更换源，推荐使用清华源
+   ![pics/image-20200526085714794](pics/image-20200526085714794.png)
 
-> ## pypi 镜像使用帮助
->
-> pypi 镜像每 5 分钟同步一次。
->
-> ### 临时使用
->
-> ```
-> pip install -i https://pypi.tuna.tsinghua.edu.cn/simple some-package
-> ```
->
-> 注意，`simple` 不能少, 是 `https` 而不是 `http`
->
-> ### 设为默认
->
-> 升级 pip 到最新的版本 (>=10.0.0) 后进行配置：
->
-> ```
-> pip install pip -U
-> pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
-> ```
->
-> 如果您到 pip 默认源的网络连接较差，临时使用本镜像站来升级 pip：
->
-> ```
-> pip install -i https://pypi.tuna.tsinghua.edu.cn/simple pip -U
-> ```
+2. 将cmder所在路径添加到环境变量中
+
+   ![pics/image-20200526085836292](pics/image-20200526085836292.png)
+
+3. ![pics/image-20200526085902101](pics/image-20200526085902101.png)
+
+4. ![pics/image-20200526085933295](pics/image-20200526085933295.png)
+
+5. ![pics/image-20200526090104746](pics/image-20200526090104746.png)
 
 
-
-## 2 安装对应版本的`chromedriver`
-
-由于该脚本中需要驱动chrome进行爬取，因此需要安装与机器上chrome版本一直的chromdriver
-
-> https://npm.taobao.org/mirrors/chromedriver
-
-进入上述网站下载对应系统对应版本的包，替换`2/` `3/`目录下的chromedriver.exe即可
 
 # 使用方法
 
+## 清除数据
+
+```
+cd Web_validation
+```
+
 先清除路径下的`datas`文件
 
+这里使用`..\python`的原因是因为项目中打包了一个独立的python环境，避免了python版本不一致导致的一系列问题
+
 ```
-python clean_all_datas.py
+..\python clean_all_datas.py
 ```
 
 
 
-然后运行脚本， 参数`1,2,3,4`是步骤
+## 运行脚本
+
+运行脚本， 参数`1,2,3,4`是步骤
 
 1. 解密步骤
 2. 外网过滤步骤
@@ -63,6 +46,19 @@ python clean_all_datas.py
 4. 按host文件分发图片步骤
 
 ```python
-python main.py -s 1,2,3,4
+..\python main.py -s 1,2,3,4
 ```
 
+
+
+## 参数介绍
+
+![pics/image-20200526090643601](pics/image-20200526090643601.png)
+
+> - -s 步骤选择，按逗号分割，可支持独立执行某个步骤，只需要将输入数据放到指定文件夹中
+>
+> - -d 调试模式，会打印出子脚本的调试信息
+>
+> - -t 严格过滤模式，在第二步外网过滤的过程中，会过滤掉外文网站（大部分外文网站访问速度较慢，在截图的时候需要加载完所有页面元素，截图所需时间变长，降低截图效率）
+>
+> - -p 指定python可执行程序所在位置，默认是`..\python.exe`
