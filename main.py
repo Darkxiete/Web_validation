@@ -10,7 +10,7 @@ import os.path
 from copy import deepcopy
 
 
-bin_env = os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir, "bin")) + ";"
+bin_env = os.path.abspath(os.path.join(os.path.dirname(__file__), "bin")) + ";"
 sys32_env = r"C:\Windows\system32;"
 GLOBAL_ENV = os.environ.copy()
 GLOBAL_ENV["PATH"] = GLOBAL_ENV["PATH"].replace(bin_env, "").replace(sys32_env, "")
