@@ -1,4 +1,4 @@
-from os.path import split, splitext, getctime, join, exists
+from os.path import split, splitext, getctime, join, exists, isfile
 from os import chdir, mkdir, listdir
 from subprocess import Popen
 from argparse import ArgumentParser
@@ -30,8 +30,10 @@ def ex_cmd(cmd: str, py_path=None, use_system_path: bool=False) -> None:
         cmd = cmd.replace("python", py_path)
     _env = org_env if use_system_path else no32_env
     Popen(cmd, shell=True, env=_env).communicate()
+
+
 def get_last_list(file_path):
-    dir_list = listdir(file_path)
+    dir_list = [d for d in listdir(file_path) if not isfile(d)]
     if not dir_list:
         return
     else:
@@ -56,7 +58,7 @@ if __name__ == '__main__':
                         help="debug mode")
     parser.add_argument("-t", "--strict", action="store_true", dest="strict",
                         help="strict filter mode")
-    parser.add_argument("-p", "--path", action="store", dest="path", default="..\\python.exe",
+    parser.add_argument("-p", "--path", action="store", dest="path", default=os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir, "python.exe")),
                         help="path of python interruptor")
     args = parser.parse_args()
     steps = args.steps.split(",")
@@ -100,4 +102,5 @@ if __name__ == '__main__':
     if '4' in steps:
         print("Step 4 分发图片")
         last_pics_path = get_last_list("3/pics")
+        assert last_pics_path is not None, "{}不是可用路径，请检查第三步截图是否成功，如成功请按host文件名在3\\pics路径下创建同名文件".format(last_pics_path)
         ex_cmd("python move_pics_by_csv.py -p1 3\datas -p2 3\pics\{}".format(last_pics_path), path)
