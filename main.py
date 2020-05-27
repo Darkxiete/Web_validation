@@ -58,12 +58,15 @@ if __name__ == '__main__':
                         help="debug mode")
     parser.add_argument("-t", "--strict", action="store_true", dest="strict",
                         help="strict filter mode")
+    parser.add_argument("-w", "--filter_by_neg_word", action="store_true", dest="filter_by_neg_word",
+                        help="filter by negative word")
     parser.add_argument("-p", "--path", action="store", dest="path", default=os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir, "python.exe")),
                         help="path of python interruptor")
     args = parser.parse_args()
     steps = args.steps.split(",")
     debug = args.debug
     strict = args.strict
+    filter_by_neg_word = args.filter_by_neg_word
     path = args.path
 
 
@@ -80,11 +83,13 @@ if __name__ == '__main__':
         print("Step 2 外网过滤")
         chdir("2")
         for file in glob("datas/*.txt"):
-            cmd = "python icp_crawler.py -p datas/{} -w -i".format(split(file)[1])
+            cmd = "python icp_crawler.py -p datas/{} -i".format(split(file)[1])
             if debug:
                 cmd += " -d"
             if strict:
                 cmd += " -c"
+            if filter_by_neg_word:
+                cmd += " -w"
             ex_cmd(cmd, path)
         chdir("..")
 
