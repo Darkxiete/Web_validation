@@ -70,11 +70,13 @@ if __name__ == '__main__':
     assert len(steps) > 0, "指定步骤为空！请正确添加执行步骤，如'1,2,3,4'"
 
     if '1' in steps:
+        assert get_last_list("1/datas") is not None, "步骤1没有输入文件"
         print("Step 1 解密")
         ex_cmd("python 1/decrypt.py -p 1/datas", path)
         ex_cmd("mv 1/datas/*.txt 2/datas")
 
     if '2' in steps:
+        assert get_last_list("2/datas") is not None, "步骤2没有输入文件"
         print("Step 2 外网过滤")
         chdir("2")
         for file in glob("datas/*.txt"):
@@ -88,6 +90,7 @@ if __name__ == '__main__':
 
     if '3' in steps:
         print("Step 3 外网截图")
+        assert get_last_list("2/datas") is not None, "步骤3没有输入文件"
         ex_cmd("cat 2/datas/*_hosts.csv >> 3/datas/_total_hosts.csv")
         ex_cmd("cat 3/datas/_total_hosts.csv | sort -u > 3/datas/total_hosts.csv")
         ex_cmd("cp 2/datas/*_hosts.csv 3/datas")
@@ -104,3 +107,4 @@ if __name__ == '__main__':
         last_pics_path = get_last_list("3/pics")
         assert last_pics_path is not None, "{}不是可用路径，请检查第三步截图是否成功，如成功请按host文件名在3\\pics路径下创建同名文件".format(last_pics_path)
         ex_cmd("python move_pics_by_csv.py -p1 3\datas -p2 3\pics\{}".format(last_pics_path), path)
+        ex_cmd(r"cp 2/datas/[!_]*_ret.csv ret")
