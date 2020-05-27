@@ -9,7 +9,7 @@ import os.path
 # 引入上层包
 sys.path.append(
     os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir)))
-from ex_cmd import ex_cmd
+from main import ex_cmd
 
 
 def decrypt(file_path):

@@ -16,6 +16,13 @@ from copy import deepcopy
 from queue import Empty
 from subprocess import Popen, PIPE
 
+import sys
+import os.path
+# 引入上层包
+sys.path.append(
+    os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir)))
+from main import ex_cmd
+
 
 replace_for_colon = "冒号"
 
@@ -395,5 +402,4 @@ if __name__ == '__main__':
         LOG.info('Done.')
         for w, _, _ in sch.d.workers_info:
             w.exit()  # TODO 非阻塞退出
-        res = Popen('TASKKILL /IM chromedriver.exe /F', shell=True, stdout=PIPE, encoding='gbk').communicate()
-        LOG.info(res)
+        ex_cmd('TASKKILL /IM chromedriver.exe /F', None, True)

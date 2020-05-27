@@ -4,9 +4,32 @@ from subprocess import Popen
 from argparse import ArgumentParser
 import re
 from glob import glob
-from ex_cmd import ex_cmd
+
+from subprocess import Popen
+import os.path
+from copy import deepcopy
 
 
+bin_env = os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir, "bin")) + ";"
+sys32_env = r"C:\Windows\system32;"
+GLOBAL_ENV = os.environ.copy()
+GLOBAL_ENV["PATH"] = GLOBAL_ENV["PATH"].replace(bin_env, "").replace(sys32_env, "")
+
+org_env = deepcopy(GLOBAL_ENV)
+no32_env = deepcopy(GLOBAL_ENV)
+
+if sys32_env not in org_env["PATH"]:
+    org_env["PATH"] = sys32_env + org_env["PATH"]
+if bin_env not in no32_env["PATH"]:
+    no32_env["PATH"] = bin_env + no32_env["PATH"]
+
+
+def ex_cmd(cmd: str, py_path=None, use_system_path: bool=False) -> None:
+    print(cmd)
+    if "python" in cmd and py_path:
+        cmd = cmd.replace("python", py_path)
+    _env = org_env if use_system_path else no32_env
+    Popen(cmd, shell=True, env=_env).communicate()
 def get_last_list(file_path):
     dir_list = listdir(file_path)
     if not dir_list:
