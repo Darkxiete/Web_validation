@@ -16,3 +16,4 @@ backup
 bin
 3/chromedriver.exe
 .idea
+ret/
