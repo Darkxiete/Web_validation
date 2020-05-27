@@ -4,19 +4,7 @@ from subprocess import Popen
 from argparse import ArgumentParser
 import re
 from glob import glob
-
-
-PyPath = None
-
-def ex_cmd(cmd: str, py_path=None) -> None:
-    print(cmd)
-    if "python" in cmd and py_path:
-        cmd = cmd.replace("python", py_path)
-    for sh in ("ls ", "cp ", "mv ", "rm ", "ls ", "xargs ", "sort ", "cat "):
-        if sh in cmd:
-            cmd = cmd.replace(sh, "bin\\{}.exe ".format(sh[:-1]))
-            print(cmd)
-    Popen(cmd, shell=True).communicate()
+from ex_cmd import ex_cmd
 
 
 def get_last_list(file_path):
