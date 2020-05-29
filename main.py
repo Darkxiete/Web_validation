@@ -60,7 +60,7 @@ if __name__ == '__main__':
                         help="strict filter mode")
     parser.add_argument("-w", "--filter_by_neg_word", action="store_true", dest="filter_by_neg_word",
                         help="filter by negative word")
-    parser.add_argument("-p", "--path", action="store", dest="path", default=os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir, "python.exe")),
+    parser.add_argument("-p", "--path", action="store", dest="path", default=os.path.abspath(os.path.join(os.path.dirname(__file__),  os.path.pardir, "Python3.7.6", "python.exe")),
                         help="path of python interruptor")
     args = parser.parse_args()
     steps = args.steps.split(",")
