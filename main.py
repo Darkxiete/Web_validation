@@ -108,8 +108,17 @@ if __name__ == '__main__':
         chdir("..")
 
     if '4' in steps:
-        print("Step 4 分发图片")
+        print("Step 4 网站图片分类")
         last_pics_path = get_last_list("3/pics")
         assert last_pics_path is not None, "{}不是可用路径，请检查第三步截图是否成功，如成功请按host文件名在3\\pics路径下创建同名文件".format(last_pics_path)
-        ex_cmd("python move_pics_by_csv.py -p1 3\datas -p2 3\pics\{}".format(last_pics_path), path)
+        chdir("4")
+        ex_cmd(r"python ocr.py -p {}".format("../3/pics/{}/".format(last_pics_path)))
+        chdir("..")
+
+    if '5' in steps:
+        print("Step 5 分发图片")
+        last_pics_path = get_last_list("4/result_figure")
+        assert last_pics_path is not None, "{}不是可用路径，请检查第三步截图是否成功，如成功请按host文件名在3\\pics路径下创建同名文件".format(last_pics_path)
+        ex_cmd(r"python move_pics_by_csv.py -p1 3/datas -p2 4/result_figure".format(last_pics_path), path)
         ex_cmd(r"cp 2/datas/[!_]*_ret.csv ret")
+

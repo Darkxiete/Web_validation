@@ -17,3 +17,6 @@ bin
 3/chromedriver.exe
 .idea
 ret/
+4/result_figure/*
+4/rawFigure/*
+4/noiseFigure/*

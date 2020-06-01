@@ -17,6 +17,7 @@ from queue import Empty
 from subprocess import Popen, PIPE
 
 import sys
+import os
 import os.path
 # 引入上层包
 sys.path.append(
@@ -124,6 +125,7 @@ class ThreadCrawl(Thread):
         :return:
         """
         chrome_options = webdriver.ChromeOptions()
+        chrome_options.binary_location = os.path.abspath(os.path.join(os.path.dirname(__file__),  os.path.pardir, os.path.pardir, "chrome", "chrome.exe"))
         chrome_options.add_argument('--ignore-certificate-errors')
         chrome_options.add_argument('--disable-gpu')
         chrome_options.add_argument("disable-web-security")
