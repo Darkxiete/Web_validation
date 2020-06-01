@@ -131,7 +131,7 @@ if __name__ == '__main__':
     #-------------------------正则表达式进行文本匹配
                 match1 = pattern1.match(a10)
                 match2 = pattern2.match(a10)
-                if (match1 and not match2):
+                if (match1 and (not match2)):
                     ff2=open(r"./tmpResult/result.txt",'a+')
                     ff2.write(f_list1[di]+'\n')
                     ff2.close()
