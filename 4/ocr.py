@@ -7,9 +7,10 @@ import json
 import re
 import urllib.parse
 import base64
-import xlsxwriter
 import shutil
 from argparse import ArgumentParser
+import urllib3
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 global c
 
 def group_Figure(path):
@@ -56,12 +57,12 @@ if __name__ == '__main__':
         if fname[-3:]=='png':
            h.append(fname)
     f_number=[xs for xs in range(len(h))]
+
     #--------------------------获取秘钥-----------------
     import token_ocr
     values =token_ocr.getKey()
     key_list=values.split(',')
     keyValue=key_list[3].split(':')[1]
-    print (keyValue)
     #----------------------图片转码-----------------
     
     #清空文件内容
@@ -118,6 +119,7 @@ if __name__ == '__main__':
         while(nk<3):
             try: 
                 req=c.post(url,headers=headers,data=body)
+                print("processing pic: {}".format(di))
                 contentDict = json.loads(req.text)
        
                 word_list = contentDict['words_result']
@@ -125,19 +127,19 @@ if __name__ == '__main__':
                 a10=str()
                 for word_dict in word_list:
                     a10=a10+word_dict['words']+','
-                feature_dic[f_list1[di]]=a10
+                feature_dic[h[di]]=a10
                 with open(r"./tmpResult/ocrContent.txt",'a+',encoding='utf-8') as ff2:
                     ff2.write(a10+'\n')
     #-------------------------正则表达式进行文本匹配
                 match1 = pattern1.match(a10)
                 match2 = pattern2.match(a10)
-                if (match1 and (not match2)):
+                if (match1 and not match2):
                     ff2=open(r"./tmpResult/result.txt",'a+')
-                    ff2.write(f_list1[di]+'\n')
+                    ff2.write(h[di]+'\n')
                     ff2.close()
                 else:
                     ff3=open(r"./tmpResult/noise.txt",'a+')
-                    ff3.write(f_list1[di]+'\n')
+                    ff3.write(h[di]+'\n')
                     ff3.close()
                 break
             except:
