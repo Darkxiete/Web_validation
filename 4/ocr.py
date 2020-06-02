@@ -119,7 +119,7 @@ if __name__ == '__main__':
         while(nk<3):
             try: 
                 req=c.post(url,headers=headers,data=body)
-                print("processing pic: {}".format(di))
+                print("processing pic: {}/{}".format(di + 1, len(f_number)))
                 contentDict = json.loads(req.text)
        
                 word_list = contentDict['words_result']

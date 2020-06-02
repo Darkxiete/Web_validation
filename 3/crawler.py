@@ -40,8 +40,10 @@ class Scheduler:
         self.failed_queue = Queue()
         self.workers = []
         self.tm_workers = []
+        self.url_num = 0
         self._init(file_path)
         self.file_path = file_path
+        
 
     def _init(self, file_path):
         """
@@ -61,6 +63,7 @@ class Scheduler:
         urls = set(url.strip() for url in content)
         for d in urls:
             self.url_queue.put([d, RETRIES])  # 最多重试2次
+            self.url_num += 1
 
     def scheduling(self):
         """
@@ -88,7 +91,7 @@ class Scheduler:
             self.tm_workers.append(worker)
             workers_info.append((worker, i + 1, 'TimeoutCrawl'))
 
-        self.d = Daemon(self.file_path, workers_info, self.url_queue, self.failed_queue, self.timeout_queue)
+        self.d = Daemon(self.file_path, workers_info, self.url_num, self.url_queue, self.failed_queue, self.timeout_queue)
         self.d.daemon = True
         self.d.start()
 
@@ -309,9 +312,10 @@ class TimeoutCrawl(ThreadCrawl):
 
 
 class Daemon(Thread):
-    def __init__(self, path, workers_info, queue_1, queue_2, queue_3):
+    def __init__(self, path, workers_info, url_num, queue_1, queue_2, queue_3):
         Thread.__init__(self)
         self.workers_info = workers_info
+        self.url_num = url_num
         self.url_queue = queue_1
         self.failed_queue = queue_2
         self.timeout_queue = queue_3
@@ -324,8 +328,9 @@ class Daemon(Thread):
         while True:
             time.sleep(5)
             LOG.info("=" * 60)
-            LOG.info("[Daemon]URL_QUEUE: {} , unfinished task: {}".format(self.url_queue.qsize(),
-                                                                          self.url_queue.unfinished_tasks))
+            LOG.info("[Daemon]URL_QUEUE: {} , unfinished task: {}/{}".format(self.url_queue.qsize(),
+                                                                            self.url_queue.unfinished_tasks,
+                                                                            self.url_num))
             LOG.info("[Daemon]FAILED_QUEUE: {}, unfinished task: {}".format(self.failed_queue.qsize(),
                                                                             self.failed_queue.unfinished_tasks))
             LOG.info("[Daemon]TIMEOUT_QUEUE: {}, unfinished task: {}".format(self.timeout_queue.qsize(),
