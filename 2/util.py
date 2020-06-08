@@ -178,7 +178,7 @@ def ip_addr(ip):
     return country
 
 
-def pre_filter(df: pd.DataFrame, logger: Logger = None) -> pd.DataFrame:
+def pre_filter(df: pd.DataFrame, logger: Logger = None, writer=None) -> pd.DataFrame:
     """
     爬虫前的预处理，4步
     输入数据是读取的源文件
@@ -193,6 +193,9 @@ def pre_filter(df: pd.DataFrame, logger: Logger = None) -> pd.DataFrame:
     if logger:
         logger.info("=" * 30)
         logger.info("爬取前的数据预处理，输入数据共{}条".format(len(df)))
+    if writer:
+        writer.write("爬取前的数据预处理，输入数据共\t{}\n".format(len(df)))
+        writer.flush()
     if 'IPADDR' not in df.columns:
         df = df[-(df['dst_ip_id'].str.contains('^1156') == True)]
         if logger:
@@ -209,7 +212,7 @@ def pre_filter(df: pd.DataFrame, logger: Logger = None) -> pd.DataFrame:
     return df
 
 
-def uni_format(file_path: str, file_from: str, id:str, logger: Logger = None) -> None:
+def uni_format(file_path: str, file_from: str, id:str, logger: Logger = None, writer=None) -> None:
     """
     读取源文件，输入index, host, referer 三列，作为爬虫数据的输入文件。
     会生成两个文件在本地：
@@ -269,7 +272,7 @@ def uni_format(file_path: str, file_from: str, id:str, logger: Logger = None) ->
     df = df.groupby('HOST', as_index=False).apply(lambda _df: _df.sort_values('CAPTURE_TIME', ascending=False).head(4))
     if logger:
         logger.info("每个HOST下账号密码只取近期前4条，剩余{}条".format(len(df)))
-    df = pre_filter(df, logger)
+    df = pre_filter(df, logger, writer)
 
     web_info_df = df[['HOST', 'dst_ip', 'src_ip', 'REFERER', 'form_data', 'AUTH_ACCOUNT', 'CAPTURE_TIME', 'USERNAME',
         'PASSWORD', 'code']]
@@ -288,6 +291,7 @@ def concat(res_file_path: str, input_file_path: str, output_file_path: str,
            is_filter_by_word: bool = False,
            is_filter_by_input: bool = False,
            is_filter_by_country: bool = False,
+           writer = None
            ) -> None:
     """
     使用爬虫结果文件关联上原始文件，并将结果保存在输出路径中
@@ -358,6 +362,9 @@ def concat(res_file_path: str, input_file_path: str, output_file_path: str,
     LOG.info("去重过滤掉{}条数据".format(now_num - len(df)))
     df.to_csv(output_file_path, sep='\t', index=False)
     LOG.info("最终{}条数据".format(len(df)))
+    if writer:
+        writer.write("最终数据\t{}".format(len(df)))
+        writer.flush()
     df["HOST"].drop_duplicates().to_csv("./datas/{}_hosts.csv".format(file_name), sep='\t', index=False)
 
 

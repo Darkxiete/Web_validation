@@ -375,7 +375,7 @@ if __name__ == "__main__":
                 重试次数：{}
                 ID：{}
             """.format(file_path, THREAD_NUMS, TIMEOUT, RETRIES, RQ))
-
+    writer = open("../stat", "w", encoding='utf8')
     # 文件类型 可选 "tang" or "wu"
     if file_type == "fulltext":
         file_from = "wu"
@@ -383,7 +383,7 @@ if __name__ == "__main__":
         dir_path, file_name = get_file_name(file_path)
         # 输入文件
         tag = time.strftime("%Y%m%d%H%M", time.localtime(time.time()))
-        uni_format(file_path, file_from=file_from, id=RQ, logger=LOG)
+        uni_format(file_path, file_from=file_from, id=RQ, logger=LOG, writer=writer)
         # 调度器
         sch = Scheduler("./tmp/{}_referers.tsv".format(RQ), "utf8", "tsv")
         sch.scheduling()
@@ -391,12 +391,16 @@ if __name__ == "__main__":
         LOG.info("开始合并文件")
         concat(ret_file_path, "./tmp/{}_{}.tsv".format(RQ, file_from), "./datas/{}_ret.csv".format(file_name),
                LOG,
-               is_filter_by_word, is_filter_by_input, is_filter_by_country)
+               is_filter_by_word, is_filter_by_input, is_filter_by_country, 
+               writer=writer)
+       	writer.close()
     elif file_type == "urls":
         sch = Scheduler(file_path, "utf8", "tsv")
         sch.scheduling()
+        writer.close()
     else:
         LOG.error("Wrong file type: {}, Please choose 'fulltext or 'urls'".format(file_type))
+        writer.close()
         import sys
 
         sys.exit(-1)
