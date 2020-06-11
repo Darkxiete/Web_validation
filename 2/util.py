@@ -254,7 +254,9 @@ def uni_format(file_path: str, file_from: str, id:str, logger: Logger = None, wr
         if logger:
             logger.info("读取数据{}，剩余{}条".format(file_path, len(df)))
         if writer:
-            writer.write("读取数据，共{}条".format(len(df)))
+            writer.write("读取数据共\t{}".format(len(df)))
+            writer.write("\n")
+            writer.flush()
     df = df[-df['REFERER'].isnull()]
     if logger:
         logger.info("过滤掉不包含REFERER字段的数据后，剩余{}条".format(len(df)))
