@@ -193,9 +193,6 @@ def pre_filter(df: pd.DataFrame, logger: Logger = None, writer=None) -> pd.DataF
     if logger:
         logger.info("=" * 30)
         logger.info("爬取前的数据预处理，输入数据共{}条".format(len(df)))
-    if writer:
-        writer.write("爬取前的数据预处理，输入数据共\t{}\n".format(len(df)))
-        writer.flush()
     if 'IPADDR' not in df.columns:
         df = df[-(df['dst_ip_id'].str.contains('^1156') == True)]
         if logger:
@@ -256,6 +253,8 @@ def uni_format(file_path: str, file_from: str, id:str, logger: Logger = None, wr
                          dtype=dict([(c, 'str') for c in col]))
         if logger:
             logger.info("读取数据{}，剩余{}条".format(file_path, len(df)))
+        if writer:
+            writer.write("读取数据，共{}条".format(len(df)))
     df = df[-df['REFERER'].isnull()]
     if logger:
         logger.info("过滤掉不包含REFERER字段的数据后，剩余{}条".format(len(df)))
