@@ -129,7 +129,7 @@ if __name__ == '__main__':
                     a10=a10+word_dict['words']+','
                 feature_dic[h[di]]=a10
                 with open(r"./tmpResult/ocrContent.txt",'a+',encoding='utf-8') as ff2:
-                    ff2.write(a10+'\n')
+                    ff2.write(h[di]+'识别内容： '+a10+'\n')
     #-------------------------正则表达式进行文本匹配
                 match1 = pattern1.match(a10)
                 match2 = pattern2.match(a10)
