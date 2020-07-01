@@ -104,7 +104,7 @@ if __name__ == '__main__':
             file_dir = splitext(file)[0]
             if not exists(file_dir):
                 mkdir(file_dir)
-        ex_cmd("python crawler.py -p datas/total_hosts.csv", path)
+        ex_cmd("python crawler.py -p datas/total_hosts.csv -l", path)
         chdir("..")
 
     if '4' in steps:
