@@ -7,6 +7,8 @@ from os import chdir, mkdir, makedirs
 from argparse import ArgumentParser
 
 
+colon_str = "冒号"
+
 def move_files_by_csv(csv_path: str, pics_src_path: str, pics_dir_path: str) -> None:
     pics_dir_path = join("ret", pics_dir_path)
     if not exists(pics_dir_path):
@@ -15,7 +17,7 @@ def move_files_by_csv(csv_path: str, pics_src_path: str, pics_dir_path: str) -> 
     for pic_name in df["hosts"]:
         pic_name = pic_name.replace(":", "_") + ".png"
         pic_src_path = join(pics_src_path, pic_name)
-
+        pic_src_path = pic_src_path.replace(colon_str, ":")
         try:
             copy(pic_src_path,pics_dir_path)
             print("copy {} to {}".format(pic_src_path, pics_dir_path))

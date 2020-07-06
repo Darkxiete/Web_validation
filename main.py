@@ -62,12 +62,15 @@ if __name__ == '__main__':
                         help="filter by negative word")
     parser.add_argument("-p", "--path", action="store", dest="path", default=os.path.abspath(os.path.join(os.path.dirname(__file__),  os.path.pardir, "Python3.7.6", "python.exe")),
                         help="path of python interruptor")
+    parser.add_argument("-l", "--headless", action="store_true", dest="headless",
+                        help="headless mode")
     args = parser.parse_args()
     steps = args.steps.split(",")
     debug = args.debug
     strict = args.strict
     filter_by_neg_word = args.filter_by_neg_word
     path = args.path
+    is_headless = args.headless
 
 
     assert len(steps) > 0, "指定步骤为空！请正确添加执行步骤，如'1,2,3,4'"
@@ -104,7 +107,10 @@ if __name__ == '__main__':
             file_dir = splitext(file)[0]
             if not exists(file_dir):
                 mkdir(file_dir)
-        ex_cmd("python crawler.py -p datas/total_hosts.csv -l", path)
+        cmd = "python crawler.py -p datas/total_hosts.csv"
+        if is_headless:
+        	cmd += " -l"
+        ex_cmd(cmd, path)
         chdir("..")
 
     if '4' in steps:
