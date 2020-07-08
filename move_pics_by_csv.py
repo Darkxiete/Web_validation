@@ -15,13 +15,13 @@ def move_files_by_csv(csv_path: str, pics_src_path: str, pics_dir_path: str) -> 
         makedirs(pics_dir_path)
     df = pd.read_csv(csv_path, names=['hosts'])
     for pic_name in df["hosts"]:
-        pic_name = pic_name.replace(":", "_") + ".png"
+        pic_name = pic_name.replace(":", colon_str) + ".png"
         pic_src_path = join(pics_src_path, pic_name)
-        pic_src_path = pic_src_path.replace(colon_str, ":")
         try:
             copy(pic_src_path,pics_dir_path)
             print("copy {} to {}".format(pic_src_path, pics_dir_path))
         except FileNotFoundError as e:
+            print("move pic: {} failed, error: {}".format(pic_src_path, str(e)))
             continue
 
 def move_files_by_csvs(csv_path: List[str], pics_src_path: str) -> None:
