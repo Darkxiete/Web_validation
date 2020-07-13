@@ -25,8 +25,16 @@ sys.path.append(
 from main import ex_cmd
 
 
-replace_for_colon = "冒号"
-
+replace_char = {
+    ":": "冒号",
+    "/": "斜杠",
+    "\\": "反斜杠",
+    "*": "星号",
+    "?": "问号",
+    "<": "小于号",
+    ">": "大于号",
+    "|": "竖线"
+}
 
 class Scheduler:
     """
@@ -227,7 +235,9 @@ class ThreadCrawl(Thread):
                     continue
                 # 保存图片的时候需要把当前操作系统非法文件名符号剔除掉
                 #url_name = url if ":" not in url else url.split(":")[0]
-                url_name = url.replace(":", replace_for_colon)
+                url_name = url
+                for invalid_char in replace_char.keys():
+                    url_name = url_name.replace(invalid_char, replace_char[invalid_char])
                 save_path = 'pics/{}/{}.png'.format(RQ, url_name.split('/')[0])
                 self.driver.get_screenshot_as_file(save_path)
                 self.url_queue.task_done()
