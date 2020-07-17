@@ -381,7 +381,7 @@ def purify(line: str) -> Dict[str, str]:
     """
     sep = ';'
     data = line.split(';_QUERY_MATCHTERMS')[0].strip("...") \
-        .replace('; ', sep).replace('...', sep).replace('##', sep)
+        .replace('; ', sep).replace('...', sep).replace('##', sep).replace('&', sep)
     eles = data.split(';')
     eles = filter(lambda x: ('?' not in x) and ('&' not in x) and ('=' in x), eles)
     return dict([tuple(ele.split('=', 1)) for ele in eles])
