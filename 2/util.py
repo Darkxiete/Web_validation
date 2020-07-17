@@ -12,6 +12,7 @@ from subprocess import PIPE, Popen
 import json
 from typing import Dict, Tuple
 from argparse import ArgumentParser
+from requests.utils import dict_from_cookiejar
 
 LOG_LEVEL_DICT = {
     'debug': logging.DEBUG,
@@ -156,9 +157,9 @@ def word_filter(file_path: str) -> pd.DataFrame:
     # 读取爬虫结果
     df = pd.read_csv(file_path,
                      sep='\t',
-                     names=['referer', 'icp', 'title', 'keywords', 'description', 'names'],
+                     names=['referer', 'icp', 'title', 'keywords', 'description', 'names', 'cookies'],
                      dtype={'referer': 'str', 'icp': 'str', 'title': 'str', 'keywords': 'str', 'description': 'str',
-                            'names': 'str'})
+                            'names': 'str', 'cookies': 'str'})
     assert len(df != 0), "{}文件为空".format(file_path)
     df['icp_label'] = df.apply(lambda row: 1 if 'ICP' in str(row['icp']).upper() else 0, axis=1)
     df['neg_words_label'] = df.apply(lambda row: mark(row, neg_words), axis=1)
@@ -422,6 +423,9 @@ def get_file_name(file_path: str, with_suffix = False) -> Tuple[str, str]:
     return dir_path, file_name
 
 
+def get_cookies_by_resp(resp) -> Dict[str, str]:
+    d = dict_from_cookiejar(resp.cookies)
+    return ";".join(["{}={}".format(k, v) for k, v in d.items()])
 
 
 if __name__ == '__main__':
