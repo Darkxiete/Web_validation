@@ -240,8 +240,7 @@ def uni_format(file_path: str, file_from: str, id:str, logger: Logger = None, wr
             return ""
     
     if file_from == 'wu':
-        col = ['AUTH_ACCOUNT', 'dst_ip', 'src_ip', 'REFERER', 'form_data', 'USERNAME', 'PASSWORD', 'code', 'src_ip_id',
-               'dst_ip_id', 'CAPTURE_TIME']
+        col = ['AUTH_ACCOUNT', 'dst_ip', 'src_ip', 'REFERER', 'form_data', 'USERNAME', 'PASSWORD', 'code', '_COOKIE','dst_ip_id', 'CAPTURE_TIME','SRC_PORT']
     elif file_from == 'tang':
         col = ['AUTH_ACCOUNT', 'CAPTURE_TIME', 'HOST', 'REFERER', 'TITLE', 'IPADDR', 'USERNAME', 'PASSWORD']
     else:
