@@ -20,3 +20,8 @@ ret/
 4/result_figure/*
 4/rawFigure/*
 4/noiseFigure/*
+stat
+4/tmpResult/base64g.txt   
+4/tmpResult/noise.txt     
+4/tmpResult/ocrContent.txt
+4/tmpResult/result.txt    

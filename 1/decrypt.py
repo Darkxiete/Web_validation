@@ -55,7 +55,7 @@ if __name__ == "__main__":
         print("change dir to {}".format(dot_files_path))
         ex_cmd("ls result*. | sh -c \"xargs -n1 -i mv {} {}tar\"")
         # Popen("ls |sh -c \"xargs -n1 -i sed -i '1d' {}\"", shell=True).communicate()
-        ex_cmd("ls result*.tar | sh -c \"xargs -n1 -i tar -zxvf {}\"")
+        ex_cmd("ls result*.tar | xargs -n1 -i tar -zxvf \{\}")
         ex_cmd("ls _queryResult_db_/result*.txt | sh -c \"xargs -n1 -i cat {} >>../../" + num + ".txt\"")
         print("change dir to {}".format(abslt_root_path))
         chdir(abslt_root_path)
